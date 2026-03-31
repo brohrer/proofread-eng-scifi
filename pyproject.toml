@@ -1,7 +1,10 @@
 [project]
-name = "alms"
+name = "proofread-eng-scify"
 version = "0.1.0"
-description = "Add your description here"
+description = """
+An artisanal language model for proofreading prose in the style of
+classical English science fiction.
+"""
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
