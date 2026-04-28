@@ -1,4 +1,4 @@
-from data.eval.spelling import evaluation_dataset
+from spelling import evaluation_dataset
 
 
 def test_data_loading():
@@ -21,12 +21,12 @@ def test_data_loading():
             print(f'check wrong text: "{extracted_text}"')
 
             try:
-                wrong_text_index = paragraph.index(' ' + wrong_text + ' ') + 1
+                wrong_text_index = paragraph.index(" " + wrong_text + " ") + 1
             except ValueError:
                 wrong_text_index = paragraph.index(wrong_text)
 
             print(
-                f'wrong text starts at {wrong_text_index},' +
-                f' with length of {len(wrong_text)}'
+                f"wrong text starts at {wrong_text_index},"
+                + f" with length of {len(wrong_text)}"
             )
             assert wrong_text == extracted_text
