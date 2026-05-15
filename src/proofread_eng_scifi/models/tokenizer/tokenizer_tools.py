@@ -2,7 +2,7 @@ import os
 import sentencepiece as spm
 
 default_data_rel_path = os.path.join(
-    os.path.dirname(__file__), "..", "..", "..", "..", "data/"
+    os.path.dirname(__file__), "..", "..", "..", "..", "data", "training"
 )
 default_model_prefix = os.path.join(
     os.path.dirname(__file__), "model_versions", "default"

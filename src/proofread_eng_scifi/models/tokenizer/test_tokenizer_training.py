@@ -47,8 +47,8 @@ def test_tokenizer_training(tokenizer_fixture):
     assert test_pieces[8] == "ize"
 
     test_ids = tok.encode_as_ids(test_sentence)
-    assert test_ids[1] == 15
-    assert test_ids[5] == 11522
+    assert test_ids[1] == 16
+    assert test_ids[5] == 13026
     assert test_ids[10] == 6
 
     # decode: id => text

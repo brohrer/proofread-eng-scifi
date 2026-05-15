@@ -10,13 +10,49 @@ L. Frank Baum.
 
 ### Installation
 
+```
+uv add proofread-eng-scifi
+```
+
+or
+
+```
+pip install proofread-eng-scifi
+```
+
 ### Using the proofreader
 
-##
+In a Python script
+
+```
+from proofread-eng-scifi.proof_## import proof_file
+proof_file("text_file.txt")
+```
+
+or
+
+```
+from proofread-eng-scifi.proof_## import proof_text
+proof_text(text_string)
+```
+
 
 -----
 
 ## For someone who wants to modify the proofreader
+
+Get an editable copy installed
+
+```
+uv pip install -e proofread-eng-scifi
+```
+or
+
+```
+git clone https://codeberg.org/brohrer/proofread-eng-scifi.git
+cd proofread-eng-scifi
+uv pip install -e .
+```
 
 ### Testing
 
@@ -28,20 +64,41 @@ uv run pytest
 
 ### Running evaluations
 
-`evals/`
+`uv run evals/eval_proofreading.py`
 
 ### How the code is organized
 
-**Model development code** sits in the top level `model_dev/` directory. Once
-models have been created and tested and are ready to be used in the
-proofreader, they are moved to the `src/proofread_eng_scify/models/`
-directory. Versions are indicated with a two digit squential counter
-appended to the model name, such as `tokenizer_13`.
+![Project structure for proofread-eng-scifi
+](https://raw.githubusercontent.com/brohrer/blog_images/refs/heads/main/alms_task/project_structure.png)
 
+Detail in [this blog post](https://brandonrohrer.at/alms_end_to_end.html).
 
-**Tests** are scattered throughout the code, sitting close to the code they are
-meant to test. They are primarily unit tests. For now, integration and
-end-to-end testing gets covered by evaluations.
+## Publishing new versions to PyPI
 
-**Evaluations** are in `evals/`
+Make sure to bump ther version number of necessary.
+
+```
+uv build
+```
+
+Set the test pypi token in the local environment with
+
+```
+export UV_PUBLISH_TOKEN=pypi-AgENdGVzdC5weXBp...
+```
+
+Publish a test version to PyPI test environment if desired
+
+```
+uv publish --publish-url https://test.pypi.org/legacy/
+```
+
+after testing, update `UV_PUBLISH_TOKEN` to the token for the primary
+pypi environment and upload to PyPI
+
+```
+export UV_PUBLISH_TOKEN=pypi-AgENdGVzdC5weXBp...
+uv publish
+```
+
 

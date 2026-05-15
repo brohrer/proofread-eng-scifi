@@ -34,7 +34,7 @@ def proof_text(body):
     ]
 
     # The top 5% least expected tokens are errors.
-    error_detections = [likelihood > 0.95 for likelihood in likelihoods]
+    error_detections = [likelihood < 0.05 for likelihood in likelihoods]
 
     # Pull out starts and stops for errors
     errors = []
@@ -70,7 +70,7 @@ def report_errors_to_console(errors):
     print("-------------------------------------------------------------")
     print("Errors detected")
     for error in errors:
-        print(f"  \"{error['error_text']}\"  at position {error['first_char']}")
+        print(f'  "{error["error_text"]}"  at position {error["first_char"]}')
 
 
 def report_metrics_to_console(metrics):
