@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import pytest
-from proofread_eng_scifi.models.fomm.fomm_dev import FirstOrderMarkovModel
+from proofread_eng_scifi.models.fomm.fomm import FirstOrderMarkovModel
 from proofread_eng_scifi.models.tokenizer.tokenizer_tools import (
     load as load_tokenizer,
 )
