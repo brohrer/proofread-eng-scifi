@@ -1,18 +1,16 @@
 """
 These are the initialization options that are specific to `tokenizer_00`
+
+Run with
+    uv run test_tokenizer_00.py
 """
 
-import os
-from proofread_eng_scifi.models.tokenizer.tokenizer_tools import (
-    train as train_tokenizer,
-)
+from proofread_eng_scifi.models.tokenizer.tokenizer import train
 
-model_prefix = os.path.join(
-    os.path.dirname(__file__), "model_versions", "tokenizer_00"
-)
+model_name = "tokenizer_00"
 
-train_tokenizer(
-    model_prefix=model_prefix,
+train(
+    model_name=model_name,
     model_type="unigram",
     normalization_rule_name="identity",
     remove_extra_whitespaces=False,

@@ -166,5 +166,10 @@ cython_debug/
 *.model
 *.vocab
 
+# Picked models
+*.pkl
+
 # Development artifacts and discarded code
 archive/
+*.swp
+*.swo

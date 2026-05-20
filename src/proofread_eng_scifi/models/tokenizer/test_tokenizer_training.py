@@ -1,17 +1,12 @@
 import os
 import pytest
 import time
-from proofread_eng_scifi.models.tokenizer.tokenizer_tools import (
+from proofread_eng_scifi.models.tokenizer.tokenizer import (
     load as load_tokenizer,
-)
-from proofread_eng_scifi.models.tokenizer.tokenizer_tools import (
     train as train_tokenizer,
 )
 
-model_rel_path = os.path.dirname(__file__)
-model_file_prefix = f"test_tokenizer_{int(time.time())}"
-model_prefix = os.path.join(model_rel_path, model_file_prefix)
-
+model_name = f"test_tokenizer_{int(time.time())}"
 model_type = "unigram"  # "unigram" (default), "bpe"
 normalization_rule_name = "identity"  # one of:
 remove_extra_whitespaces = False
@@ -22,7 +17,7 @@ vocab_size = 20000
 @pytest.fixture
 def tokenizer_fixture():
     train_tokenizer(
-        model_prefix=model_prefix,
+        model_name=model_name,
         model_type=model_type,
         normalization_rule_name=normalization_rule_name,
         remove_extra_whitespaces=remove_extra_whitespaces,
@@ -30,11 +25,13 @@ def tokenizer_fixture():
         vocab_size=vocab_size,
     )
 
-    tokenizer_model = load_tokenizer(model_prefix)
+    tokenizer_model = load_tokenizer(model_name)
     yield tokenizer_model
 
-    os.remove(model_prefix + ".model")
-    os.remove(model_prefix + ".vocab")
+    model_rel_path = os.path.dirname(__file__)
+    model_path_prefix = os.path.join(model_rel_path, model_name)
+    os.remove(model_path_prefix + ".model")
+    os.remove(model_path_prefix + ".vocab")
 
 
 def test_tokenizer_training(tokenizer_fixture):

@@ -2,11 +2,11 @@ import os
 import numpy as np
 import pytest
 from proofread_eng_scifi.models.fomm.fomm import FirstOrderMarkovModel
-from proofread_eng_scifi.models.tokenizer.tokenizer_tools import (
+from proofread_eng_scifi.models.tokenizer.tokenizer import (
     load as load_tokenizer,
 )
 
-tokenizer_name = "tokenizer_00"
+test_model_name = "temp_test_model"
 test_text_filename = os.path.join(
     os.path.dirname(__file__),
     "..",
@@ -17,6 +17,7 @@ test_text_filename = os.path.join(
     "evaluation",
     "frankenstein.txt",
 )
+tokenizer_name = "tokenizer_00"
 
 
 @pytest.fixture
@@ -35,24 +36,37 @@ def tokenizer():
 @pytest.fixture
 def model(tokenizer):
     n_unique_tokens = tokenizer.get_piece_size()
-    fomm_instance = FirstOrderMarkovModel(n_unique_tokens=n_unique_tokens)
+    fomm_instance = FirstOrderMarkovModel(
+        n_unique_tokens=n_unique_tokens,
+        model_name=test_model_name,
+        tokenizer_name=tokenizer_name,
+    )
     return fomm_instance
 
 
 def test_fomm_creation(model):
     assert isinstance(model.n_unique_tokens, int)
     assert model.n_unique_tokens > 0
+    assert model.model_name == test_model_name
+    assert model.tokenizer_name == tokenizer_name
+
+    assert 0.0 <= model.transition_probability_floor <= 1.0
+
+    n_rows, n_cols = model.transition_counts.shape
+    assert n_rows == model.n_unique_tokens
+    assert n_cols == model.n_unique_tokens
 
     n_rows, n_cols = model.transition_probabilities.shape
     assert n_rows == model.n_unique_tokens
     assert n_cols == model.n_unique_tokens
 
-    assert 0.0 <= model.transition_probability_floor <= 1.0
+    assert isinstance(model.transition_counts[0][0], np.int32)
+    assert isinstance(model.transition_probabilities[0][0], np.float64)
 
 
-def test_fomm_training(model, test_text, tokenizer):
+def test_fomm_training_from_tokens(model, test_text, tokenizer):
     ids = tokenizer.encode_as_ids(test_text)
-    model.train(ids)
+    model.train_from_tokens(ids)
 
     assert np.sum(model.transition_counts) >= len(ids) - 1
     assert 0.0 < np.mean(model.transition_probabilities) < 1.0

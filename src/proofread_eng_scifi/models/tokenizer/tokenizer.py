@@ -4,9 +4,7 @@ import sentencepiece as spm
 default_data_rel_path = os.path.join(
     os.path.dirname(__file__), "..", "..", "..", "..", "data", "training"
 )
-default_model_prefix = os.path.join(
-    os.path.dirname(__file__), "model_versions", "default"
-)
+default_model_name = "tokenizer_no_9"
 
 default_normalization_rule_name = "identity"  # one of:
 # nmt_nfkc: NFKC normalization with some additional normalization around spaces. (default)
@@ -18,7 +16,7 @@ default_normalization_rule_name = "identity"  # one of:
 
 def train(
     data_rel_path=default_data_rel_path,
-    model_prefix=default_model_prefix,
+    model_name=default_model_name,
     model_type="unigram",  # "unigram" or "bpe"
     normalization_rule_name=default_normalization_rule_name,
     remove_extra_whitespaces=False,
@@ -26,6 +24,7 @@ def train(
     vocab_size=20000,
     python_args=True,
 ):
+    model_path_prefix = os.path.join(os.path.dirname(__file__), model_name)
     training_files = [
         os.path.join(data_rel_path, f)
         for f in os.listdir(data_rel_path)
@@ -35,7 +34,7 @@ def train(
     if python_args:
         spm.SentencePieceTrainer.train(
             input=training_paths,
-            model_prefix=model_prefix,
+            model_prefix=model_path_prefix,
             model_type=model_type,
             normalization_rule_name=normalization_rule_name,
             remove_extra_whitespaces=remove_extra_whitespaces,
@@ -46,7 +45,7 @@ def train(
         training_arguments = " ".join(
             [
                 f"--input={training_paths}",
-                f"--model_prefix={model_prefix}",
+                f"--model_prefix={model_path_prefix}",
                 f"--model_type={model_type}",
                 f"--normalization_rule_name={normalization_rule_name}",
                 f"--remove_extra_whitespaces={str(remove_extra_whitespaces).lower()}",
@@ -59,17 +58,15 @@ def train(
     return spm.SentencePieceProcessor()
 
 
-def load(model_prefix):
+def load(model_name):
     """
-    model_prefix: str
-    The full pathname and filename prefix of the model, minus the .model suffix.
+    model_name: str
+    The nameof the model, minus the .model suffix.
     """
-    model_filename = model_prefix + ".model"
-    abs_model_filename = os.path.join(
-        os.path.dirname(__file__), "model_versions", model_filename
-    )
+    model_filename = model_name + ".model"
+    model_path = os.path.join(os.path.dirname(__file__), model_filename)
     tokenizer = spm.SentencePieceProcessor()
-    tokenizer.load(abs_model_filename)
+    tokenizer.load(model_path)
     return tokenizer
 
 
