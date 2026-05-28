@@ -5,9 +5,7 @@ Make random guesses about where errors are.
 import sys
 import numpy as np
 import proofread_eng_scifi.models.random.lm_random_00 as lm
-from proofread_eng_scifi.models.tokenizer.tokenizer_tools import (
-    load as load_tokenizer,
-)
+import proofread_eng_scifi.models.tokenizer.tokenizer as tokenizer_tools
 
 tokenizer_name = "tokenizer_00"
 
@@ -18,8 +16,8 @@ def proof_file(filename):
     return proof_text(body)
 
 
-def proof_text(body):
-    tokenizer = load_tokenizer(tokenizer_name)
+def proof_text(body, verbose=True):
+    tokenizer = tokenizer_tools.load(tokenizer_name)
 
     # Pass the text through a tokenizer
     body_ids = tokenizer.encode_as_ids(body)
@@ -51,8 +49,9 @@ def proof_text(body):
     metrics = calculate_metrics(body, errors)
 
     # Report the indices and text associated with each error.
-    report_errors_to_console(errors)
-    report_metrics_to_console(metrics)
+    if verbose:
+        report_errors_to_console(errors)
+        report_metrics_to_console(metrics)
 
     return errors, metrics
 

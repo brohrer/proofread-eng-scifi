@@ -1,12 +1,49 @@
+import os
+import pickle
+import time
+import numpy as np
 from proofread_eng_scifi.proof_01 import proof_text as proof_text_01
+from proofread_eng_scifi.proof_02 import proof_text as proof_text_02
+from capitalization import evaluation_dataset as capitalization_dataset
 from spelling import evaluation_dataset as spelling_dataset
 
 eval_dict = {
     "spelling": spelling_dataset,
+    "capitalization": capitalization_dataset,
 }
+results_filename = "eval_results.pkl"
+results_path = os.path.join(os.path.dirname(__file__), results_filename)
 
 
-def run_evals():
+def run_evals_for_all(verbose=True):
+    proofreaders = [
+        {
+            "name": "proof_01",
+            "description": "random",
+            "function": proof_text_01,
+        },
+        {
+            "name": "proof_02",
+            "description": "FOMM",
+            "function": proof_text_02,
+        }
+    ]
+    for proofreader in proofreaders:
+        if verbose:
+            print(f"Evaluating proofreader {proofreader['name']}")
+        start = time.time()
+        proofreader["results"] = run_evals(proofreader["function"])
+        duration = time.time() - start
+        if verbose:
+            print(f"    completed in {duration:.03} seconds.")
+
+    with open(results_path, "wb") as f:
+        pickle.dump(proofreaders, f)
+
+    report_results()
+
+
+def run_evals(proofread_text):
     results_dict = {}
     for eval_name, dataset in eval_dict.items():
         true_pos_total = 0
@@ -14,7 +51,10 @@ def run_evals():
         false_neg_total = 0
 
         for paragraph_group in dataset:
-            detected_errors, _ = proof_text_01(paragraph_group["paragraph"])
+            detected_errors, _ = proofread_text(
+                paragraph_group["paragraph"],
+                verbose=False,
+            )
             true_pos, false_pos, false_neg = calculate_results(
                 paragraph_group["mistakes"], detected_errors
             )
@@ -32,7 +72,7 @@ def run_evals():
             "recall": recall,
         }
 
-    print(results_dict)
+    return results_dict
 
 
 def calculate_results(ground_truth, detected):
@@ -72,5 +112,42 @@ def calculate_results(ground_truth, detected):
     return true_positives, false_positives, false_negatives
 
 
+def report_results():
+    with open(results_path, "rb") as f:
+        proofreaders = pickle.load(f)
+
+    n_evals = len(proofreaders)
+    n_cols = n_evals + 1
+    n_rows = len(proofreaders)
+
+    # Generate a markdown table
+    md_table = "| model | name |"
+    categories = list(proofreaders[0]["results"].keys())
+    categories.sort()
+    for category in categories:
+        md_table += f" {category} |"
+    md_table += "\n|"
+    for _ in range(n_cols):
+        md_table += " -------- |"
+
+    for proofreader in proofreaders:
+        md_table += f"\n| {proofreader['description']} |"
+        md_table += f"{proofreader['name']} |"
+        for category in categories:
+            precision = proofreader["results"][category]["precision"]
+            precision_pct = int(np.round(100 * precision))
+            recall = proofreader["results"][category]["recall"]
+            recall_pct = int(np.round(100 * recall))
+            md_table += f" ({precision_pct}) {recall_pct} |"
+    print(md_table)
+
+    for proofreader in proofreaders:
+        print()
+        print("---------------------------")
+        print(proofreader["name"])
+        print()
+        print(proofreader["results"])
+
+
 if __name__ == "__main__":
-    run_evals()
+    run_evals_for_all()
