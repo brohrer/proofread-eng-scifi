@@ -1,8 +1,10 @@
 from capitalization import evaluation_dataset as capitalization_dataset
+from punctuation import evaluation_dataset as punctuation_dataset
 from spelling import evaluation_dataset as spelling_dataset
 
 evaluation_datasets = [
     capitalization_dataset,
+    punctuation_dataset,
     spelling_dataset,
 ]
 
@@ -28,7 +30,9 @@ def test_data_loading():
                 print(f'check wrong text: "{extracted_text}"')
 
                 try:
-                    wrong_text_index = paragraph.index(" " + wrong_text + " ") + 1
+                    wrong_text_index = (
+                        paragraph.index(" " + wrong_text + " ") + 1
+                    )
                 except ValueError:
                     wrong_text_index = paragraph.index(wrong_text)
 

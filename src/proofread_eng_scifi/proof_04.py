@@ -7,7 +7,7 @@ import numpy as np
 import proofread_eng_scifi.models.fomm.fomm as lm_tools
 import proofread_eng_scifi.models.tokenizer.tokenizer as tokenizer_tools
 
-FOMM_NAME = "fomm_00"
+FOMM_NAME = "fomm_01"
 
 # Transitions with likelihoods lower than this threshold are assumed
 # to be errors.
@@ -112,7 +112,7 @@ if __name__ == "__main__":
         print("""
   Run
 
-      uv run proof_02.py <filename>
+      uv run proof_##.py <filename>
 
   to proofread <filename>.
 """)

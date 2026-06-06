@@ -2,7 +2,7 @@ import os
 import sentencepiece as spm
 
 default_data_rel_path = os.path.join(
-    os.path.dirname(__file__), "..", "..", "..", "..", "data", "training"
+    os.path.dirname(__file__), "..", "..", "..", "..", "data", "training_00"
 )
 default_model_name = "tokenizer_no_9"
 

@@ -1,17 +1,13 @@
 """
-Use a first order Markov model to predict errors
+Use a second order Markov model to predict errors
 """
 
 import sys
 import numpy as np
-import proofread_eng_scifi.models.fomm.fomm as lm_tools
+import proofread_eng_scifi.models.somm.somm as lm_tools
 import proofread_eng_scifi.models.tokenizer.tokenizer as tokenizer_tools
 
-FOMM_NAME = "fomm_00"
-
-# Transitions with likelihoods lower than this threshold are assumed
-# to be errors.
-ERROR_THRESHOLD = 0.0005
+MODEL_NAME = "somm_01"
 
 
 def proof_file(filename):
@@ -20,8 +16,8 @@ def proof_file(filename):
     return proof_text(body)
 
 
-def proof_text(body, verbose=True, debug=False):
-    lm = lm_tools.load(FOMM_NAME)
+def proof_text(body, model_name=MODEL_NAME, verbose=True, debug=False):
+    lm = lm_tools.load(model_name)
     tokenizer = tokenizer_tools.load(lm.tokenizer_name)
 
     # Pass the text through a tokenizer
@@ -47,7 +43,7 @@ def proof_text(body, verbose=True, debug=False):
 
     # The least expected tokens are errors.
     error_detections = [
-        likelihood < ERROR_THRESHOLD for likelihood in likelihoods
+        likelihood < lm.error_threshold for likelihood in likelihoods
     ]
 
     # Pull out starts and stops for errors
@@ -112,7 +108,7 @@ if __name__ == "__main__":
         print("""
   Run
 
-      uv run proof_02.py <filename>
+      uv run proof_##.py <filename>
 
   to proofread <filename>.
 """)

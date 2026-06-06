@@ -1,0 +1,19 @@
+"""
+These are the initialization options that are specific to `tokenizer_02`
+
+Run with
+    uv run test_tokenizer_02.py
+"""
+
+from proofread_eng_scifi.models.tokenizer.tokenizer import train
+
+model_name = "tokenizer_02"
+
+train(
+    model_name=model_name,
+    model_type="unigram",
+    normalization_rule_name="identity",
+    remove_extra_whitespaces=False,
+    split_by_whitespace=False,
+    vocab_size=5000,
+)

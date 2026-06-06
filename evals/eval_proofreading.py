@@ -4,12 +4,17 @@ import time
 import numpy as np
 from proofread_eng_scifi.proof_01 import proof_text as proof_text_01
 from proofread_eng_scifi.proof_02 import proof_text as proof_text_02
+from proofread_eng_scifi.proof_03 import proof_text as proof_text_03
+from proofread_eng_scifi.proof_04 import proof_text as proof_text_04
+from proofread_eng_scifi.proof_05 import proof_text as proof_text_05
 from capitalization import evaluation_dataset as capitalization_dataset
+from punctuation import evaluation_dataset as punctuation_dataset
 from spelling import evaluation_dataset as spelling_dataset
 
 eval_dict = {
-    "spelling": spelling_dataset,
     "capitalization": capitalization_dataset,
+    "punctuation": punctuation_dataset,
+    "spelling": spelling_dataset,
 }
 results_filename = "eval_results.pkl"
 results_path = os.path.join(os.path.dirname(__file__), results_filename)
@@ -24,9 +29,24 @@ def run_evals_for_all(verbose=True):
         },
         {
             "name": "proof_02",
-            "description": "FOMM",
+            "description": "FOMM_00",
             "function": proof_text_02,
-        }
+        },
+        {
+            "name": "proof_03",
+            "description": "SOMM_00",
+            "function": proof_text_03,
+        },
+        {
+            "name": "proof_04",
+            "description": "FOMM_01",
+            "function": proof_text_04,
+        },
+        {
+            "name": "proof_05",
+            "description": "SOMM_01",
+            "function": proof_text_05,
+        },
     ]
     for proofreader in proofreaders:
         if verbose:
@@ -43,9 +63,12 @@ def run_evals_for_all(verbose=True):
     report_results()
 
 
-def run_evals(proofread_text):
+def run_evals(proofread_text, verbose=True):
     results_dict = {}
     for eval_name, dataset in eval_dict.items():
+        if verbose:
+            print(f"    running {eval_name} eval")
+
         true_pos_total = 0
         false_pos_total = 0
         false_neg_total = 0
@@ -118,7 +141,6 @@ def report_results():
 
     n_evals = len(proofreaders)
     n_cols = n_evals + 1
-    n_rows = len(proofreaders)
 
     # Generate a markdown table
     md_table = "| model | name |"
