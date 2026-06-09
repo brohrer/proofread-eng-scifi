@@ -6,7 +6,12 @@ MODEL_NAME = "fomm_01"
 TOKENIZER_NAME = "tokenizer_00"
 
 training_data_top = os.path.join(
-    os.path.dirname(__file__), "..", "..", "..", "..", "data",
+    os.path.dirname(__file__),
+    "..",
+    "..",
+    "..",
+    "..",
+    "data",
 )
 training_data_dirs = [
     "training_00",
@@ -43,8 +48,8 @@ def train(
                     training_text = f.read()
                 except UnicodeDecodeError:
                     print(
-                        "UnicodeDecodeError encountered, " +
-                        f"skipping {training_file}"
+                        "UnicodeDecodeError encountered, "
+                        + f"skipping {training_file}"
                     )
                     continue
 

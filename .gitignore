@@ -171,6 +171,7 @@ cython_debug/
 
 # Development artifacts and discarded code
 archive/
+TODO.md
 *.swp
 *.swo
 .DS_Store

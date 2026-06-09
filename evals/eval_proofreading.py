@@ -7,6 +7,7 @@ from proofread_eng_scifi.proof_02 import proof_text as proof_text_02
 from proofread_eng_scifi.proof_03 import proof_text as proof_text_03
 from proofread_eng_scifi.proof_04 import proof_text as proof_text_04
 from proofread_eng_scifi.proof_05 import proof_text as proof_text_05
+from proofread_eng_scifi.proof_06 import proof_text as proof_text_06
 from capitalization import evaluation_dataset as capitalization_dataset
 from punctuation import evaluation_dataset as punctuation_dataset
 from spelling import evaluation_dataset as spelling_dataset
@@ -46,6 +47,11 @@ def run_evals_for_all(verbose=True):
             "name": "proof_05",
             "description": "SOMM_01",
             "function": proof_text_05,
+        },
+        {
+            "name": "proof_06",
+            "description": "SOMM_02",
+            "function": proof_text_06,
         },
     ]
     for proofreader in proofreaders:

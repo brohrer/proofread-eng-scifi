@@ -10,10 +10,10 @@ import proofread_eng_scifi.models.tokenizer.tokenizer as tokenizer_tools
 MODEL_NAME = "somm_00"
 
 
-def proof_file(filename):
+def proof_file(filename, verbose=True):
     with open(filename, "rt") as f:
         body = f.read()
-    return proof_text(body)
+    return proof_text(body, verbose=verbose)
 
 
 def proof_text(body, model_name=MODEL_NAME, verbose=True, debug=False):

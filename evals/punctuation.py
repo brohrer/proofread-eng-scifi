@@ -51,7 +51,7 @@ wretch.”
             {
                 "first_char": 25,
                 "last_char": 36,
-                "wrong_text": 'cousin, said',
+                "wrong_text": "cousin, said",
                 "correct_text": 'cousin," said',
             },
             {

@@ -1,9 +1,11 @@
 import os
-from proofread_eng_scifi.models.somm.somm import SecondOrderMarkovModel
+from proofread_eng_scifi.models.somm.somm_sparse import (
+    SparseSecondOrderMarkovModel as Model,
+)
 import proofread_eng_scifi.models.tokenizer.tokenizer as tokenizer_mod
 
-MODEL_NAME = "somm_01"
-TOKENIZER_NAME = "tokenizer_04"
+MODEL_NAME = "somm_02"
+TOKENIZER_NAME = "tokenizer_00"
 
 training_data_top = os.path.join(
     os.path.dirname(__file__),
@@ -26,7 +28,7 @@ def train(
     verbose=True,
 ):
     tokenizer = tokenizer_mod.load(tokenizer_name)
-    model = SecondOrderMarkovModel(
+    model = Model(
         n_unique_tokens=tokenizer.get_piece_size(),
         model_name=model_name,
         tokenizer_name=tokenizer_name,
