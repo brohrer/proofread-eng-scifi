@@ -84,7 +84,9 @@ def test_somm_training_from_tokens(model, test_text, tokenizer):
     likelihood = (
         trigram_count / bigram_count + model.transition_probability_floor
     )
-    assert model.calculate_likelihoods(ids[7:10])[0] == pytest.approx(likelihood)
+    assert model.calculate_likelihoods(ids[7:10])[0] == pytest.approx(
+        likelihood
+    )
 
     assert (
         np.min(model.calculate_likelihoods(ids[22:122]))

@@ -23,7 +23,7 @@ class FirstOrderMarkovModel:
         self.n_unique_tokens = int(n_unique_tokens)
         self.model_name = model_name
         self.tokenizer_name = tokenizer_name
-        self.transition_probability_floor = 1e-6
+        self.transition_probability_floor = 1e-9
         self.initialize()
 
     def initialize(self):

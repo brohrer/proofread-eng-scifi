@@ -175,3 +175,6 @@ TODO.md
 *.swp
 *.swo
 .DS_Store
+
+# Training data
+data/training_02/

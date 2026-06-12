@@ -22,8 +22,8 @@ class SecondOrderMarkovModel:
         model_name=default_model_name,
         tokenizer_name="tokenizer_04",
         error_threshold=default_error_threshold,
-        transition_probability_floor=1e-6,
-        epsilon=1e-8,
+        transition_probability_floor=1e-9,
+        epsilon=1e-10,
     ):
         if n_unique_tokens is None:
             raise RuntimeError("n_unique_tokens is a required argument")

@@ -8,6 +8,8 @@ from proofread_eng_scifi.proof_03 import proof_text as proof_text_03
 from proofread_eng_scifi.proof_04 import proof_text as proof_text_04
 from proofread_eng_scifi.proof_05 import proof_text as proof_text_05
 from proofread_eng_scifi.proof_06 import proof_text as proof_text_06
+from proofread_eng_scifi.proof_07 import proof_text as proof_text_07
+from proofread_eng_scifi.proof_08 import proof_text as proof_text_08
 from capitalization import evaluation_dataset as capitalization_dataset
 from punctuation import evaluation_dataset as punctuation_dataset
 from spelling import evaluation_dataset as spelling_dataset
@@ -25,33 +27,67 @@ def run_evals_for_all(verbose=True):
     proofreaders = [
         {
             "name": "proof_01",
-            "description": "random",
+            "lang_model": "random",
+            "description": "random baseline",
             "function": proof_text_01,
+            "alphabet_size": 0,
+            "training_books": 0,
         },
         {
             "name": "proof_02",
-            "description": "FOMM_00",
+            "lang_model": "FOMM_00",
+            "description": "first-order Markov model",
             "function": proof_text_02,
+            "alphabet_size": 20_000,
+            "training_books": 10,
         },
         {
             "name": "proof_03",
-            "description": "SOMM_00",
+            "lang_model": "SOMM_00",
+            "description": "second-order Markov model",
             "function": proof_text_03,
+            "alphabet_size": 20_000,
+            "training_books": 10,
         },
         {
             "name": "proof_04",
-            "description": "FOMM_01",
+            "lang_model": "FOMM_01",
+            "description": "second-order Markov model",
             "function": proof_text_04,
+            "alphabet_size": 20_000,
+            "training_books": 20,
         },
         {
             "name": "proof_05",
-            "description": "SOMM_01",
+            "lang_model": "SOMM_01",
+            "description": "second-order Markov model",
             "function": proof_text_05,
+            "alphabet_size": 1_000,
+            "training_books": 20,
         },
         {
             "name": "proof_06",
-            "description": "SOMM_02",
+            "lang_model": "SOMM_02",
+            "description": "sparse second-order Markov model",
             "function": proof_text_06,
+            "alphabet_size": 20_000,
+            "training_books": 20,
+        },
+        {
+            "name": "proof_07",
+            "lang_model": "FOMM_02",
+            "description": "sparse second-order Markov model",
+            "function": proof_text_07,
+            "alphabet_size": 20_000,
+            "training_books": 416,
+        },
+        {
+            "name": "proof_08",
+            "lang_model": "SOMM_03",
+            "description": "second-order Markov model",
+            "function": proof_text_08,
+            "alphabet_size": 20_000,
+            "training_books": 416,
         },
     ]
     for proofreader in proofreaders:
@@ -141,17 +177,15 @@ def calculate_results(ground_truth, detected):
     return true_positives, false_positives, false_negatives
 
 
-def report_results():
+def report_results(debug=False):
     with open(results_path, "rb") as f:
         proofreaders = pickle.load(f)
 
-    n_evals = len(proofreaders)
-    n_cols = n_evals + 1
-
     # Generate a markdown table
-    md_table = "| model | name |"
+    md_table = "| version |"
     categories = list(proofreaders[0]["results"].keys())
     categories.sort()
+    n_cols = len(categories) + 2
     for category in categories:
         md_table += f" {category} |"
     md_table += "\n|"
@@ -159,22 +193,31 @@ def report_results():
         md_table += " -------- |"
 
     for proofreader in proofreaders:
-        md_table += f"\n| {proofreader['description']} |"
-        md_table += f"{proofreader['name']} |"
+        version = proofreader["name"].split("_")[1]
+        md_table += f"\n| {version} |"
+        # md_table += f" {proofreader['description']} |"
         for category in categories:
             precision = proofreader["results"][category]["precision"]
             precision_pct = int(np.round(100 * precision))
             recall = proofreader["results"][category]["recall"]
             recall_pct = int(np.round(100 * recall))
             md_table += f" ({precision_pct}) {recall_pct} |"
+    print()
     print(md_table)
+    print()
+    # TODO: save md_table to file
 
-    for proofreader in proofreaders:
-        print()
-        print("---------------------------")
-        print(proofreader["name"])
-        print()
-        print(proofreader["results"])
+    # TODO: have a results table and a performance table
+
+    # TODO: show performance as a line plot
+
+    if debug:
+        for proofreader in proofreaders:
+            print()
+            print("---------------------------")
+            print(proofreader["name"])
+            print()
+            print(proofreader["results"])
 
 
 if __name__ == "__main__":
