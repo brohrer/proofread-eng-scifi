@@ -69,11 +69,13 @@ for file_id in tx_df["id"]:
     # find start index
     try:
         header_start = text.index("*** START OF")
-        header_end = text[header_start + 1:].index("***\n") + header_start + 5
+        header_end = text[header_start + 1 :].index("***\n") + header_start + 5
     except ValueError:
         try:
             header_start = text.index("***START OF")
-            header_end = text[header_start + 1:].index("***\n") + header_start + 4
+            header_end = (
+                text[header_start + 1 :].index("***\n") + header_start + 4
+            )
         except ValueError:
             raise
     print(text[header_start:header_end])
@@ -89,11 +91,10 @@ for file_id in tx_df["id"]:
                 footer_start = text.index("***END OF")
             except ValueError:
                 raise
-    print(text[footer_start: footer_start + 30])
-
+    print(text[footer_start : footer_start + 30])
 
     with open(target, "wt") as f:
-        f.write(text[header_end: footer_start])
+        f.write(text[header_end:footer_start])
     files_added += 1
 
 print(f"{files_added} files added,  {files_skipped} files skipped")

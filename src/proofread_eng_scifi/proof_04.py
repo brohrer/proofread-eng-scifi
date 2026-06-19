@@ -7,11 +7,8 @@ import numpy as np
 import proofread_eng_scifi.models.fomm.fomm as lm_tools
 import proofread_eng_scifi.models.tokenizer.tokenizer as tokenizer_tools
 
-MODEL_NAME = "fomm_01"
-
-# Transitions with likelihoods lower than this threshold are assumed
-# to be errors.
-ERROR_THRESHOLD = 0.0005
+model_name = "fomm_01"
+error_threshold = 0.0005
 
 
 def proof_file(filename, verbose=True):
@@ -21,7 +18,7 @@ def proof_file(filename, verbose=True):
 
 
 def proof_text(body, verbose=True, debug=False):
-    lm = lm_tools.load(MODEL_NAME)
+    lm = lm_tools.load(model_name)
     tokenizer = tokenizer_tools.load(lm.tokenizer_name)
 
     # Pass the text through a tokenizer
@@ -47,7 +44,7 @@ def proof_text(body, verbose=True, debug=False):
 
     # The least expected tokens are errors.
     error_detections = [
-        likelihood < ERROR_THRESHOLD for likelihood in likelihoods
+        likelihood < error_threshold for likelihood in likelihoods
     ]
 
     # Pull out starts and stops for errors

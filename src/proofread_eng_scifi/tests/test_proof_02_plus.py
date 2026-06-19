@@ -25,7 +25,7 @@ proofreaders = [
 
 def test_proof_file():
     for proofreader in proofreaders:
-        print(f"    proofing file with {proofreader.MODEL_NAME}")
+        print(f"    proofing file with {proofreader.model_name}")
         errors, metrics = proofreader.proof_file(filename_00, verbose=False)
 
         assert isinstance(errors, list)
@@ -39,7 +39,7 @@ def test_proof_file():
 
 def test_proof_text():
     for proofreader in proofreaders:
-        print(f"    proofing text with {proofreader.MODEL_NAME}")
+        print(f"    proofing text with {proofreader.model_name}")
         with open(filename_00, "rt") as f:
             body = f.read()
             errors, metrics = proofreader.proof_text(body, verbose=False)

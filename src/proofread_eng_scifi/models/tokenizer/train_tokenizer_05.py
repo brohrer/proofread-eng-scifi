@@ -1,8 +1,8 @@
 """
-These are the initialization options that are specific to `tokenizer_00`
+These are the initialization options that are specific to this tokenizer
 
 Run with
-    uv run test_tokenizer_00.py
+    uv run test_tokenizer_##.py
 """
 
 import os

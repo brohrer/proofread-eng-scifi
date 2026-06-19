@@ -16,6 +16,8 @@ class FirstOrderMarkovModel:
         n_unique_tokens=None,
         model_name=default_model_name,
         tokenizer_name="tokenizer_00",
+        transition_probability_floor=1e-9,
+        epsilon=1e-10,
     ):
         if n_unique_tokens is None:
             raise RuntimeError("n_unique_tokens is a required argument")
@@ -23,7 +25,8 @@ class FirstOrderMarkovModel:
         self.n_unique_tokens = int(n_unique_tokens)
         self.model_name = model_name
         self.tokenizer_name = tokenizer_name
-        self.transition_probability_floor = 1e-9
+        self.transition_probability_floor = transition_probability_floor
+        self.epsilon = epsilon
         self.initialize()
 
     def initialize(self):
@@ -46,7 +49,9 @@ class FirstOrderMarkovModel:
 
         self.transition_probabilities = (
             self.transition_counts
-            / (np.sum(self.transition_counts, axis=1) + 1e-12)[:, np.newaxis]
+            / (np.sum(self.transition_counts, axis=1) + self.epsilon)[
+                :, np.newaxis
+            ]
         ) + self.transition_probability_floor
 
     def calculate_likelihoods(self, ids):

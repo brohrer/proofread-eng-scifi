@@ -8,6 +8,7 @@ import proofread_eng_scifi.models.random.lm_random_00 as lm
 import proofread_eng_scifi.models.tokenizer.tokenizer as tokenizer_tools
 
 tokenizer_name = "tokenizer_00"
+error_threshold = 0.05
 
 
 def proof_file(filename):
@@ -32,7 +33,9 @@ def proof_text(body, verbose=True):
     ]
 
     # The top 5% least expected tokens are errors.
-    error_detections = [likelihood < 0.05 for likelihood in likelihoods]
+    error_detections = [
+        likelihood < error_threshold for likelihood in likelihoods
+    ]
 
     # Pull out starts and stops for errors
     errors = []

@@ -7,7 +7,8 @@ import numpy as np
 import proofread_eng_scifi.models.somm.somm as lm_tools
 import proofread_eng_scifi.models.tokenizer.tokenizer as tokenizer_tools
 
-MODEL_NAME = "somm_03"
+model_name = "somm_03"
+error_threshold = 1e-8
 
 
 def proof_file(filename, verbose=True):
@@ -16,7 +17,7 @@ def proof_file(filename, verbose=True):
     return proof_text(body, verbose=verbose)
 
 
-def proof_text(body, model_name=MODEL_NAME, verbose=True, debug=False):
+def proof_text(body, model_name=model_name, verbose=True, debug=False):
     lm = lm_tools.load(model_name)
     tokenizer = tokenizer_tools.load(lm.tokenizer_name)
 
@@ -43,7 +44,7 @@ def proof_text(body, model_name=MODEL_NAME, verbose=True, debug=False):
 
     # The least expected tokens are errors.
     error_detections = [
-        likelihood < lm.error_threshold for likelihood in likelihoods
+        likelihood < error_threshold for likelihood in likelihoods
     ]
 
     # Pull out starts and stops for errors

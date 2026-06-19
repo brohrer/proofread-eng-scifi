@@ -2,14 +2,17 @@ import os
 import pickle
 import time
 import numpy as np
-from proofread_eng_scifi.proof_01 import proof_text as proof_text_01
-from proofread_eng_scifi.proof_02 import proof_text as proof_text_02
-from proofread_eng_scifi.proof_03 import proof_text as proof_text_03
-from proofread_eng_scifi.proof_04 import proof_text as proof_text_04
-from proofread_eng_scifi.proof_05 import proof_text as proof_text_05
-from proofread_eng_scifi.proof_06 import proof_text as proof_text_06
-from proofread_eng_scifi.proof_07 import proof_text as proof_text_07
-from proofread_eng_scifi.proof_08 import proof_text as proof_text_08
+from proofread_eng_scifi.data_registry import registry as corpus_registry
+from proofread_eng_scifi.models.fomm.registry import registry as fomm_registry
+from proofread_eng_scifi.models.somm.registry import registry as somm_registry
+from proofread_eng_scifi.models.random.registry import (
+    registry as random_registry,
+)
+from proofread_eng_scifi.models.tokenizer.registry import (
+    registry as tokenizer_registry,
+)
+from proofread_eng_scifi.registry import modules as proofreader_modules
+from proofread_eng_scifi.registry import registry as proofreader_info
 from capitalization import evaluation_dataset as capitalization_dataset
 from punctuation import evaluation_dataset as punctuation_dataset
 from spelling import evaluation_dataset as spelling_dataset
@@ -19,90 +22,37 @@ eval_dict = {
     "punctuation": punctuation_dataset,
     "spelling": spelling_dataset,
 }
+models_filename = "model_summaries.md"
+performance_filename = "performance_summary.md"
 results_filename = "eval_results.pkl"
+models_path = os.path.join(os.path.dirname(__file__), models_filename)
+performance_path = os.path.join(os.path.dirname(__file__), performance_filename)
 results_path = os.path.join(os.path.dirname(__file__), results_filename)
 
 
-def run_evals_for_all(verbose=True):
-    proofreaders = [
-        {
-            "name": "proof_01",
-            "lang_model": "random",
-            "description": "random baseline",
-            "function": proof_text_01,
-            "alphabet_size": 0,
-            "training_books": 0,
-        },
-        {
-            "name": "proof_02",
-            "lang_model": "FOMM_00",
-            "description": "first-order Markov model",
-            "function": proof_text_02,
-            "alphabet_size": 20_000,
-            "training_books": 10,
-        },
-        {
-            "name": "proof_03",
-            "lang_model": "SOMM_00",
-            "description": "second-order Markov model",
-            "function": proof_text_03,
-            "alphabet_size": 20_000,
-            "training_books": 10,
-        },
-        {
-            "name": "proof_04",
-            "lang_model": "FOMM_01",
-            "description": "second-order Markov model",
-            "function": proof_text_04,
-            "alphabet_size": 20_000,
-            "training_books": 20,
-        },
-        {
-            "name": "proof_05",
-            "lang_model": "SOMM_01",
-            "description": "second-order Markov model",
-            "function": proof_text_05,
-            "alphabet_size": 1_000,
-            "training_books": 20,
-        },
-        {
-            "name": "proof_06",
-            "lang_model": "SOMM_02",
-            "description": "sparse second-order Markov model",
-            "function": proof_text_06,
-            "alphabet_size": 20_000,
-            "training_books": 20,
-        },
-        {
-            "name": "proof_07",
-            "lang_model": "FOMM_02",
-            "description": "sparse second-order Markov model",
-            "function": proof_text_07,
-            "alphabet_size": 20_000,
-            "training_books": 416,
-        },
-        {
-            "name": "proof_08",
-            "lang_model": "SOMM_03",
-            "description": "second-order Markov model",
-            "function": proof_text_08,
-            "alphabet_size": 20_000,
-            "training_books": 416,
-        },
-    ]
-    for proofreader in proofreaders:
-        if verbose:
-            print(f"Evaluating proofreader {proofreader['name']}")
-        start = time.time()
-        proofreader["results"] = run_evals(proofreader["function"])
-        duration = time.time() - start
-        if verbose:
-            print(f"    completed in {duration:.03} seconds.")
+def run_evals_for_many(versions="all", verbose=True):
+    for version in proofreader_info.keys():
+        if (versions == "all") or (version in versions):
+            run_evals_for_one(version, verbose=verbose)
 
     with open(results_path, "wb") as f:
-        pickle.dump(proofreaders, f)
+        pickle.dump(proofreader_info, f)
 
     report_results()
+
+
+def run_evals_for_one(version, verbose=True):
+    proofreader = proofreader_info[version]
+    if verbose:
+        print(f"Evaluating proofreader {version}")
+    start = time.time()
+    eval_function = proofreader_modules[version].proof_text
+    results = run_evals(eval_function)
+    proofreader["results"] = results
+    duration = time.time() - start
+    if verbose:
+        # print(f"    results: {results}")
+        print(f"    completed in {duration:.03} seconds.")
 
 
 def run_evals(proofread_text, verbose=True):
@@ -179,46 +129,128 @@ def calculate_results(ground_truth, detected):
 
 def report_results(debug=False):
     with open(results_path, "rb") as f:
-        proofreaders = pickle.load(f)
+        proofreader_info = pickle.load(f)
 
-    # Generate a markdown table
-    md_table = "| version |"
-    categories = list(proofreaders[0]["results"].keys())
+    # Generate a markdown table summarizing performance
+    performance_table_md = "| version |"
+
+    # Find the list of evals run
+    for key, val_dict in proofreader_info.items():
+        try:
+            categories = list(val_dict["results"].keys())
+            break
+        except KeyError:
+            # Keep cycling through the proofreader versions until one is
+            # found that has results associated with it.
+            pass
+
+        print("No results found to report")
+        return
+
     categories.sort()
     n_cols = len(categories) + 2
     for category in categories:
-        md_table += f" {category} |"
-    md_table += "\n|"
+        performance_table_md += f" {category} |"
+    performance_table_md += "\n|"
     for _ in range(n_cols):
-        md_table += " -------- |"
+        performance_table_md += " -------- |"
 
-    for proofreader in proofreaders:
-        version = proofreader["name"].split("_")[1]
-        md_table += f"\n| {version} |"
-        # md_table += f" {proofreader['description']} |"
+    for version, proofreader in proofreader_info.items():
+        try:
+            results = proofreader["results"]
+        except KeyError:
+            continue
+
+        performance_table_md += f"\n| {version} |"
+        # performance_table_md += f" {proofreader['description']} |"
         for category in categories:
-            precision = proofreader["results"][category]["precision"]
+            precision = results[category]["precision"]
             precision_pct = int(np.round(100 * precision))
-            recall = proofreader["results"][category]["recall"]
+            recall = results[category]["recall"]
             recall_pct = int(np.round(100 * recall))
-            md_table += f" ({precision_pct}) {recall_pct} |"
-    print()
-    print(md_table)
-    print()
-    # TODO: save md_table to file
+            performance_table_md += f" ({precision_pct}) {recall_pct} |"
+    performance_table_md += (
+        "\n\nPerformance values are shown as: (precision %) recall %\n"
+    )
+    print(performance_table_md)
 
-    # TODO: have a results table and a performance table
+    # save performance_table_md to file
+    with open(performance_path, "wt") as f:
+        f.write(performance_table_md)
+
+    # Generate a markdown table describing models
+    columns = [
+        "version",
+        "model",
+        "description",
+        "tokenizer",
+        "alphabet",
+        "books",
+        "error cutoff",
+    ]
+    model_table_md = "| "
+    for col in columns:
+        model_table_md += f"{col} |"
+    model_table_md += "\n|"
+    for _ in range(len(columns)):
+        model_table_md += " -------- |"
+
+    for version, proofreader in proofreader_info.items():
+        try:
+            results = proofreader["results"]
+        except KeyError:
+            continue
+
+        lang_model = proofreader["model"]
+        model_type, model_version = lang_model.split("_")
+        if model_type == "fomm":
+            model_info = fomm_registry[model_version]
+        elif model_type == "somm":
+            model_info = somm_registry[model_version]
+        elif model_type == "random":
+            model_info = random_registry[model_version]
+        else:
+            model_info = None
+            print(
+                f"model type {model_type} in proofreader "
+                + f"{version} is not valid"
+            )
+            raise ValueError
+        tokenizer_version = model_info["tokenizer_version"]
+        if tokenizer_version is None:
+            tokenizer_info = {}
+        else:
+            tokenizer_info = tokenizer_registry[tokenizer_version]
+
+        corpuses = model_info.get("training_corpus", [])
+        n_books = 0
+        for corpus in corpuses:
+            n_books += corpus_registry[corpus]["n_books"]
+
+        model_table_md += f"\n| {version} |"
+        model_table_md += f" {model_info['name']} |"
+        model_table_md += f" {model_info['description']} |"
+        model_table_md += f" {tokenizer_version} |"
+        model_table_md += f" {tokenizer_info.get('alphabet_size', 0)}k |"
+        model_table_md += f" {n_books} |"
+        model_table_md += f" {proofreader.get('error_threshold', 'NA')} |"
+    model_table_md += "\n\nModel summaries\n"
+    print(model_table_md)
+
+    # save model_table_md to file
+    with open(performance_path, "wt") as f:
+        f.write(model_table_md)
 
     # TODO: show performance as a line plot
 
     if debug:
-        for proofreader in proofreaders:
+        for proofreader in proofreader_info:
             print()
             print("---------------------------")
-            print(proofreader["name"])
+            print(proofreader["Name"])
             print()
             print(proofreader["results"])
 
 
 if __name__ == "__main__":
-    run_evals_for_all()
+    run_evals_for_many()
