@@ -1,0 +1,38 @@
+registry = {
+    "00": {
+        "version": "00",
+        "name": "fomm_00",
+        "description": "1st-order Markov",
+        "epsilon": 1e-10,
+        "probability_floor": 1e-9,
+        "training_corpus": ["00"],
+        "tokenizer_version": "00",
+    },
+    "01": {
+        "version": "01",
+        "name": "fomm_01",
+        "description": "1st-order Markov",
+        "epsilon": 1e-10,
+        "probability_floor": 1e-9,
+        "training_corpus": ["00", "01"],
+        "tokenizer_version": "00",
+    },
+    "02": {
+        "version": "02",
+        "name": "fomm_02",
+        "description": "1st-order Markov",
+        "epsilon": 1e-10,
+        "probability_floor": 1e-9,
+        "training_corpus": ["02"],
+        "tokenizer_version": "05",
+    },
+    "03": {
+        "version": "03",
+        "name": "fomm_03",
+        "description": "sparse 1st-order Markov",
+        "epsilon": 1e-10,
+        "probability_floor": 1e-9,
+        "training_corpus": ["02"],
+        "tokenizer_version": "05",
+    },
+}
