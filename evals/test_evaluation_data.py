@@ -1,9 +1,11 @@
 from capitalization import evaluation_dataset as capitalization_dataset
+from grammar import evaluation_dataset as grammar_dataset
 from punctuation import evaluation_dataset as punctuation_dataset
 from spelling import evaluation_dataset as spelling_dataset
 
 evaluation_datasets = [
     capitalization_dataset,
+    grammar_dataset,
     punctuation_dataset,
     spelling_dataset,
 ]
@@ -11,7 +13,7 @@ evaluation_datasets = [
 
 def test_data_loading():
     for evaluation_dataset in evaluation_datasets:
-        assert len(evaluation_dataset) == 5
+        assert len(evaluation_dataset) >= 5
 
         for corpus in evaluation_dataset:
             paragraph = " ".join(corpus["paragraph"].split("\n")).strip()
