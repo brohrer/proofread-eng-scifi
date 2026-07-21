@@ -478,16 +478,16 @@ class DBSecondOrderMarkovModel(MarkovBase):
 
 
 registry = {
-    "00": SecondOrderMarkovModel(
-        version="00",
-        tokenizer_version="04",
-        corpus_versions=["00"],
-    ),
-    "01": SecondOrderMarkovModel(
-        version="01",
-        tokenizer_version="04",
-        corpus_versions=["00", "01"],
-    ),
+    # "00": SecondOrderMarkovModel(
+    #     version="00",
+    #     tokenizer_version="04",
+    #     corpus_versions=["00"],
+    # ),
+    # "01": SecondOrderMarkovModel(
+    #     version="01",
+    #     tokenizer_version="04",
+    #     corpus_versions=["00", "01"],
+    # ),
     "02": SparseSecondOrderMarkovModel(
         version="02",
         tokenizer_version="00",

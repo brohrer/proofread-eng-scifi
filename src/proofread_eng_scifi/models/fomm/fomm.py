@@ -129,31 +129,31 @@ class SparseFirstOrderMarkovModel(MarkovBase):
 
 
 registry = {
-    "00": FirstOrderMarkovModel(
-        version="00",
-        tokenizer_version="00",
-        corpus_versions=["00"],
-    ),
-    "01": FirstOrderMarkovModel(
-        version="01",
-        tokenizer_version="00",
-        corpus_versions=["00", "01"],
-    ),
-    "02": FirstOrderMarkovModel(
-        version="02",
-        tokenizer_version="05",
-        corpus_versions=["02"],
-    ),
-    "03": SparseFirstOrderMarkovModel(
-        version="03",
-        tokenizer_version="05",
-        corpus_versions=["02"],
-    ),
-    "04": SparseFirstOrderMarkovModel(
-        version="04",
-        tokenizer_version="05",
-        corpus_versions=["03"],
-    ),
+    # "00": FirstOrderMarkovModel(
+    #     version="00",
+    #     tokenizer_version="00",
+    #     corpus_versions=["00"],
+    # ),
+    # "01": FirstOrderMarkovModel(
+    #     version="01",
+    #     tokenizer_version="00",
+    #     corpus_versions=["00", "01"],
+    # ),
+    # "02": FirstOrderMarkovModel(
+    #     version="02",
+    #     tokenizer_version="05",
+    #     corpus_versions=["02"],
+    # ),
+    # "03": SparseFirstOrderMarkovModel(
+    #     version="03",
+    #     tokenizer_version="05",
+    #     corpus_versions=["02"],
+    # ),
+    # "04": SparseFirstOrderMarkovModel(
+    #     version="04",
+    #     tokenizer_version="05",
+    #     corpus_versions=["03"],
+    # ),
     "05": SparseFirstOrderMarkovModel(
         version="05",
         tokenizer_version="05",
@@ -165,11 +165,11 @@ registry = {
     #     tokenizer_version="05",
     #     corpus_versions=["04"],
     # ),
-    "07": SparseFirstOrderMarkovModel(
-        version="07",
-        tokenizer_version="05",
-        corpus_versions=["05"],
-    ),
+    # "07": SparseFirstOrderMarkovModel(
+    #     version="07",
+    #     tokenizer_version="05",
+    #     corpus_versions=["05"],
+    # ),
     "08": SparseFirstOrderMarkovModel(
         version="08",
         tokenizer_version="06",
@@ -200,9 +200,9 @@ registry = {
         tokenizer_version="12",
         corpus_versions=["04"],
     ),
-    "14": SparseFirstOrderMarkovModel(
-        version="14",
-        tokenizer_version="13",
-        corpus_versions=["04"],
-    ),
+    # "14": SparseFirstOrderMarkovModel(
+    #     version="14",
+    #     tokenizer_version="13",
+    #     corpus_versions=["04"],
+    # ),
 }

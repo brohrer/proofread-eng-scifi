@@ -7,7 +7,7 @@ from proofread_eng_scifi.proofreader import BaseProofreader, registry
 
 data_corpus = data_registry["100"]
 error_threshold = 0.0005
-model = model_registry["03"]
+model = model_registry["05"]
 
 
 @pytest.fixture

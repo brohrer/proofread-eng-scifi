@@ -15,7 +15,7 @@ from proofread_eng_scifi.models.tokenizer.tokenizer import (
 test_version = f"temp_model_{int(time.time())}"
 corpus_version = "100"
 tokenizer_version = "00"
-fomm_id_for_retrieval = "01"
+fomm_id_for_retrieval = "11"
 
 
 @pytest.fixture
@@ -152,9 +152,9 @@ def test_sparse_fomm_training_from_tokens(sparse_model, test_text):
 def test_registry_retrieval(test_text):
     model = registry[fomm_id_for_retrieval]
 
-    assert model.version == "01"
-    assert model.tokenizer_version == "00"
-    assert model.corpus_versions[1] == "01"
+    assert model.version == "11"
+    assert model.tokenizer_version == "09"
+    assert model.corpus_versions[0] == "04"
 
     tokenizer = tokenizer_registry[tokenizer_version]
     ids = tokenizer.encode_as_ids(test_text)

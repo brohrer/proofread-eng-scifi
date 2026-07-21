@@ -112,30 +112,30 @@ registry = {
         model=random_registry["00"],
         error_threshold=0.05,
     ),
-    "02": BaseProofreader(
-        model=fomm_registry["00"],
-        error_threshold=0.0005,
-    ),
-    "03": BaseProofreader(
-        model=somm_registry["00"],
-        error_threshold=0.0005,
-    ),
-    "04": BaseProofreader(
-        model=fomm_registry["01"],
-        error_threshold=0.0005,
-    ),
-    "05": BaseProofreader(
-        model=somm_registry["01"],
-        error_threshold=0.0005,
-    ),
+    # "02": BaseProofreader(
+    #     model=fomm_registry["00"],
+    #     error_threshold=0.0005,
+    # ),
+    # "03": BaseProofreader(
+    #     model=somm_registry["00"],
+    #     error_threshold=0.0005,
+    # ),
+    # "04": BaseProofreader(
+    #     model=fomm_registry["01"],
+    #     error_threshold=0.0005,
+    # ),
+    # "05": BaseProofreader(
+    #     model=somm_registry["01"],
+    #     error_threshold=0.0005,
+    # ),
     "06": BaseProofreader(
         model=somm_registry["02"],
         error_threshold=0.0005,
     ),
-    "07": BaseProofreader(
-        model=fomm_registry["02"],
-        error_threshold=0.0005,
-    ),
+    # "07": BaseProofreader(
+    #     model=fomm_registry["02"],
+    #     error_threshold=0.0005,
+    # ),
     "08": BaseProofreader(
         model=somm_registry["03"],
         error_threshold=1e-8,
@@ -148,10 +148,10 @@ registry = {
         model=somm_registry["05"],
         error_threshold=1e-8,
     ),
-    "11": BaseProofreader(
-        model=fomm_registry["03"],
-        error_threshold=0.0005,
-    ),
+    # "11": BaseProofreader(
+    #     model=fomm_registry["03"],
+    #     error_threshold=0.0005,
+    # ),
     "12": BaseProofreader(
         model=somm_registry["06"],
         error_threshold=1e-8,
@@ -180,10 +180,10 @@ registry = {
     #     model=somm_registry["12"],
     #     error_threshold=1e-5,
     # ),
-    "19": BaseProofreader(
-        model=fomm_registry["04"],
-        error_threshold=1e-8,
-    ),
+    # "19": BaseProofreader(
+    #     model=fomm_registry["04"],
+    #     error_threshold=1e-8,
+    # ),
     "20": BaseProofreader(
         model=fomm_registry["05"],
         error_threshold=1e-8,
@@ -192,30 +192,30 @@ registry = {
     #     model=fomm_registry["06"],
     #     error_threshold=1e-8,
     # ),
-    "22": BaseProofreader(
-        model=fomm_registry["07"],
-        error_threshold=1e-8,
-    ),
-    "23": BaseProofreader(
-        model=fomm_registry["07"],
-        error_threshold=1e-6,
-    ),
-    "24": BaseProofreader(
-        model=fomm_registry["07"],
-        error_threshold=1e-4,
-    ),
-    "25": BaseProofreader(
-        model=fomm_registry["07"],
-        error_threshold=1e-3,
-    ),
-    "26": BaseProofreader(
-        model=fomm_registry["07"],
-        error_threshold=1e-2,
-    ),
-    "27": BaseProofreader(
-        model=fomm_registry["07"],
-        error_threshold=1e-7,
-    ),
+    # "22": BaseProofreader(
+    #     model=fomm_registry["07"],
+    #     error_threshold=1e-8,
+    # ),
+    # "23": BaseProofreader(
+    #     model=fomm_registry["07"],
+    #     error_threshold=1e-6,
+    # ),
+    # "24": BaseProofreader(
+    #     model=fomm_registry["07"],
+    #     error_threshold=1e-4,
+    # ),
+    # "25": BaseProofreader(
+    #     model=fomm_registry["07"],
+    #     error_threshold=1e-3,
+    # ),
+    # "26": BaseProofreader(
+    #     model=fomm_registry["07"],
+    #     error_threshold=1e-2,
+    # ),
+    # "27": BaseProofreader(
+    #     model=fomm_registry["07"],
+    #     error_threshold=1e-7,
+    # ),
     # "28": BaseProofreader(
     #     model=somm_registry["13"],
     #     error_threshold=1e-5,
@@ -372,8 +372,8 @@ registry = {
         model=fomm_registry["13"],
         error_threshold=1e-4,
     ),
-    "67": BaseProofreader(
-        model=fomm_registry["14"],
-        error_threshold=1e-4,
-    ),
+    # "67": BaseProofreader(
+    #     model=fomm_registry["14"],
+    #     error_threshold=1e-4,
+    # ),
 }
