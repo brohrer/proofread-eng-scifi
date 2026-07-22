@@ -4,65 +4,7 @@ token, given the previous token.
 """
 
 import os
-import numpy as np
 from proofread_eng_scifi.models.markov_base import MarkovBase
-
-
-class FirstOrderMarkovModel(MarkovBase):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.model_dir = os.path.dirname(__file__)
-        self.model_path = os.path.join(self.model_dir, self.model_filename)
-        self.description = "1st-order Markov"
-
-    def _initialize(self):
-        self.transition_counts = np.zeros(
-            (self.n_unique_tokens, self.n_unique_tokens),
-            dtype=np.int32,
-        )
-        self.transition_probabilities = np.zeros(
-            (self.n_unique_tokens, self.n_unique_tokens),
-            dtype=np.float64,
-        )
-
-    def is_ready(self):
-        # Check whether the model is trained and loaded
-        try:
-            if np.sum(self.transition_counts) > 100:
-                return True
-        except AttributeError:
-            pass
-        return False
-
-    def _train_from_tokens(self, ids):
-        # Doesn't re-initialize. Multiple calls will accumulate
-        # training experience.
-        for i_transition in range(len(ids) - 1):
-            self.transition_counts[
-                ids[i_transition], ids[i_transition + 1]
-            ] += 1
-
-        self.transition_probabilities = (
-            self.transition_counts
-            / (np.sum(self.transition_counts, axis=1) + self.epsilon)[
-                :, np.newaxis
-            ]
-        ) + self.transition_probability_floor
-
-    def _calc_likelihoods(self, ids):
-        if len(ids) < 2:
-            return None
-
-        # The model doesn't have anything useful to say about the first
-        # token, so initialize it by hand.
-        likelihoods = [1.0]
-        for i_transition in range(len(ids) - 1):
-            likelihoods.append(
-                self.transition_probabilities[
-                    ids[i_transition], ids[i_transition + 1]
-                ]
-            )
-        return likelihoods
 
 
 class SparseFirstOrderMarkovModel(MarkovBase):
@@ -126,6 +68,11 @@ class SparseFirstOrderMarkovModel(MarkovBase):
             )
 
         return likelihoods
+
+    def delete(self):
+        # Remove memory footprint
+        self.unigram_counts.clear()
+        self.bigram_counts.clear()
 
 
 registry = {

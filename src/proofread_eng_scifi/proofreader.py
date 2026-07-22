@@ -106,6 +106,9 @@ class BaseProofreader:
         )
         print()
 
+    def delete(self):
+        self.model.delete()
+
 
 registry = {
     "01": BaseProofreader(
@@ -128,50 +131,50 @@ registry = {
     #     model=somm_registry["01"],
     #     error_threshold=0.0005,
     # ),
-    "06": BaseProofreader(
-        model=somm_registry["02"],
-        error_threshold=0.0005,
-    ),
+    # "06": BaseProofreader(
+    #     model=somm_registry["02"],
+    #     error_threshold=0.0005,
+    # ),
     # "07": BaseProofreader(
     #     model=fomm_registry["02"],
     #     error_threshold=0.0005,
     # ),
-    "08": BaseProofreader(
-        model=somm_registry["03"],
-        error_threshold=1e-8,
-    ),
-    "09": BaseProofreader(
-        model=somm_registry["04"],
-        error_threshold=1e-8,
-    ),
-    "10": BaseProofreader(
-        model=somm_registry["05"],
-        error_threshold=1e-8,
-    ),
+    # "08": BaseProofreader(
+    #     model=somm_registry["03"],
+    #     error_threshold=1e-8,
+    # ),
+    # "09": BaseProofreader(
+    #     model=somm_registry["04"],
+    #     error_threshold=1e-8,
+    # ),
+    # "10": BaseProofreader(
+    #     model=somm_registry["05"],
+    #     error_threshold=1e-8,
+    # ),
     # "11": BaseProofreader(
     #     model=fomm_registry["03"],
     #     error_threshold=0.0005,
     # ),
-    "12": BaseProofreader(
-        model=somm_registry["06"],
-        error_threshold=1e-8,
-    ),
-    "13": BaseProofreader(
-        model=somm_registry["07"],
-        error_threshold=1e-8,
-    ),
-    "14": BaseProofreader(
-        model=somm_registry["08"],
-        error_threshold=1e-8,
-    ),
+    # "12": BaseProofreader(
+    #     model=somm_registry["06"],
+    #     error_threshold=1e-8,
+    # ),
+    # "13": BaseProofreader(
+    #     model=somm_registry["07"],
+    #     error_threshold=1e-8,
+    # ),
+    # "14": BaseProofreader(
+    #     model=somm_registry["08"],
+    #     error_threshold=1e-8,
+    # ),
     # "15": BaseProofreader(
     #     model=somm_registry["09"],
     #     error_threshold=1e-5,
     # ),
-    "16": BaseProofreader(
-        model=somm_registry["10"],
-        error_threshold=1e-8,
-    ),
+    # "16": BaseProofreader(
+    #     model=somm_registry["10"],
+    #     error_threshold=1e-8,
+    # ),
     # "17": BaseProofreader(
     #     model=somm_registry["11"],
     #     error_threshold=1e-8,

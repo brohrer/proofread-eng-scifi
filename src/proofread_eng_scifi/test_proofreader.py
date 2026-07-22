@@ -59,3 +59,9 @@ def test_check_proofreaders():
         assert isinstance(errors[1]["last_char"], int)
         assert isinstance(errors[1]["error_text"], str)
         assert errors[2]["first_char"] <= errors[2]["last_char"]
+
+        try:
+            proofreader.delete()
+        except AttributeError:
+            # If the model doesn't have a delete method, don't panic.
+            pass

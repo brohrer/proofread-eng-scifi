@@ -104,3 +104,7 @@ class MarkovBase:
         with open(self.model_path, "rb") as f:
             model = pickle.load(f)
         return model
+
+    def delete(self):
+        # Remove memory footprint
+        raise NotImplementedError

@@ -5,7 +5,6 @@ import numpy as np
 from proofread_eng_scifi.data_registry import registry as data_registry
 from proofread_eng_scifi.models.fomm.fomm import (
     registry,
-    FirstOrderMarkovModel,
     SparseFirstOrderMarkovModel,
 )
 from proofread_eng_scifi.models.tokenizer.tokenizer import (
@@ -26,22 +25,6 @@ def test_text():
 
 
 @pytest.fixture
-def model():
-    fomm = FirstOrderMarkovModel(
-        version=test_version,
-        corpus_versions=[corpus_version],
-        tokenizer_version=tokenizer_version,
-    )
-
-    yield fomm
-
-    try:
-        os.remove(fomm.model_path)
-    except FileNotFoundError:
-        pass
-
-
-@pytest.fixture
 def sparse_model():
     fomm = SparseFirstOrderMarkovModel(
         version=test_version,
@@ -55,47 +38,6 @@ def sparse_model():
         os.remove(fomm.model_path)
     except FileNotFoundError:
         pass
-
-
-def test_fomm_creation(model, test_text):
-    model.train()
-
-    n_rows, n_cols = model.transition_counts.shape
-    assert n_rows == model.n_unique_tokens
-    assert n_cols == model.n_unique_tokens
-
-    n_rows, n_cols = model.transition_probabilities.shape
-    assert n_rows == model.n_unique_tokens
-    assert n_cols == model.n_unique_tokens
-
-    assert isinstance(model.transition_counts[0][0], np.int32)
-    assert isinstance(model.transition_probabilities[0][0], np.float64)
-
-    likelihoods = model.calculate_likelihoods(test_text)
-    assert len(likelihoods) > 100
-
-
-def test_fomm_training_from_tokens(model, test_text):
-    tokenizer = tokenizer_registry[tokenizer_version]
-    ids = tokenizer.encode_as_ids(test_text)
-    model._initialize()
-    model.ready = True
-    model._train_from_tokens(ids)
-
-    assert np.sum(model.transition_counts) >= len(ids) - 1
-    assert 0.0 < np.mean(model.transition_probabilities) < 1.0
-
-    assert model.transition_counts[ids[1], ids[2]] >= 1
-    assert model.transition_probabilities[ids[3], ids[4]] > 0.0
-
-    assert (
-        model.calculate_likelihoods_from_ids(ids[5:7])[1]
-        == model.transition_probabilities[ids[5], ids[6]]
-    )
-    assert (
-        np.min(model.calculate_likelihoods_from_ids(ids[22:122]))
-        >= model.transition_probability_floor
-    )
 
 
 def test_sparse_fomm_creation(sparse_model, test_text):
@@ -170,3 +112,4 @@ def test_trained_status_of_all_models(test_text):
         print(f"    verifying model {version}")
         likelihoods = model.calculate_likelihoods(test_text)
         assert len(likelihoods) > 100
+        model.delete()
