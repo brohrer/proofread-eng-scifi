@@ -1,5 +1,5 @@
 import random
-from proofread_eng_scifi.models.tokenizer.tokenizer import (
+from proofread_eng.models.tokenizer.tokenizer import (
     registry as tokenizer_registry,
 )
 

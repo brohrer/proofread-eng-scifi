@@ -3,7 +3,7 @@ A script for exploring and illustrating the text chunks that a tokenizer learns.
 """
 
 import random
-from proofread_eng_scifi.models.tokenizer.tokenizer import registry
+from proofread_eng.models.tokenizer.tokenizer import registry
 
 n_samples = 100
 versions = ["05", "06", "07", "08", "09", "11", "12", "13"]

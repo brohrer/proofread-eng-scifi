@@ -426,7 +426,7 @@ wheels = [
 ]
 
 [[package]]
-name = "proofread-eng-scifi"
+name = "proofread-eng"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

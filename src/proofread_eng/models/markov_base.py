@@ -9,10 +9,10 @@ include a long startup time, especially if they haven't been trained yet.
 
 import os
 import pickle
-from proofread_eng_scifi.models.tokenizer.tokenizer import (
+from proofread_eng.models.tokenizer.tokenizer import (
     registry as tokenizer_registry,
 )
-from proofread_eng_scifi.data_registry import registry as data_registry
+from proofread_eng.data_registry import registry as data_registry
 
 
 class MarkovBase:

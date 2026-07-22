@@ -4,7 +4,7 @@ token, given the previous token.
 """
 
 import os
-from proofread_eng_scifi.models.markov_base import MarkovBase
+from proofread_eng.models.markov_base import MarkovBase
 
 
 class SparseFirstOrderMarkovModel(MarkovBase):

@@ -1,9 +1,9 @@
 import pytest
-from proofread_eng_scifi.data_registry import registry as data_registry
-from proofread_eng_scifi.models.fomm.fomm import (
+from proofread_eng.data_registry import registry as data_registry
+from proofread_eng.models.fomm.fomm import (
     registry as model_registry,
 )
-from proofread_eng_scifi.proofreader import BaseProofreader, registry
+from proofread_eng.proofreader import BaseProofreader, registry
 
 data_corpus = data_registry["100"]
 error_threshold = 0.0005

@@ -8,9 +8,9 @@ Must be supplied with an error threshold and a model which has
 """
 
 import numpy as np
-from proofread_eng_scifi.models.fomm.fomm import registry as fomm_registry
-from proofread_eng_scifi.models.random.random import registry as random_registry
-from proofread_eng_scifi.models.somm.somm import registry as somm_registry
+from proofread_eng.models.fomm.fomm import registry as fomm_registry
+from proofread_eng.models.random.random import registry as random_registry
+from proofread_eng.models.somm.somm import registry as somm_registry
 
 
 class BaseProofreader:

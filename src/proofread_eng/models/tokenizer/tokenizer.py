@@ -1,6 +1,6 @@
 import os
 import sentencepiece as spm
-from proofread_eng_scifi.data_registry import registry as data_registry
+from proofread_eng.data_registry import registry as data_registry
 
 
 class Tokenizer:

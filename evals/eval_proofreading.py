@@ -5,8 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FixedLocator, FixedFormatter
 
-from proofread_eng_scifi.data_registry import registry as corpus_registry
-from proofread_eng_scifi.proofreader import registry
+from proofread_eng.data_registry import registry as corpus_registry
+from proofread_eng.proofreader import registry
 from capitalization import evaluation_dataset as capitalization_dataset
 from grammar import evaluation_dataset as grammar_dataset
 from punctuation import evaluation_dataset as punctuation_dataset

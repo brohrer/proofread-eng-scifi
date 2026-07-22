@@ -1,5 +1,5 @@
 import os
-from proofread_eng_scifi.data_registry import Corpus, data_path, registry
+from proofread_eng.data_registry import Corpus, data_path, registry
 
 
 def test_registry_loading():

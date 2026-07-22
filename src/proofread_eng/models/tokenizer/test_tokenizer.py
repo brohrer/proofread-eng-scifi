@@ -1,7 +1,7 @@
 import os
 import pytest
 import time
-from proofread_eng_scifi.models.tokenizer.tokenizer import (
+from proofread_eng.models.tokenizer.tokenizer import (
     registry,
     Tokenizer,
 )

@@ -1,4 +1,4 @@
-# `proofread-eng-scify`, an ALM
+# `proofread-eng`, an ALM
 
 An artisanal language model (ALM) for proofreading English prose in the
 style of old-old-school science fiction, like Jules Verne, Lewis Carroll, and
@@ -11,13 +11,13 @@ L. Frank Baum.
 ### Installation
 
 ```
-uv add proofread-eng-scifi
+uv add proofread-eng
 ```
 
 or
 
 ```
-pip install proofread-eng-scifi
+pip install proofread-eng
 ```
 
 ### Using the proofreader
@@ -25,14 +25,14 @@ pip install proofread-eng-scifi
 In a Python script
 
 ```
-from proofread-eng-scifi.proof_## import proof_file
+from proofread-eng.proof_## import proof_file
 proof_file("text_file.txt")
 ```
 
 or
 
 ```
-from proofread-eng-scifi.proof_## import proof_text
+from proofread-eng.proof_## import proof_text
 proof_text(text_string)
 ```
 
@@ -44,13 +44,13 @@ proof_text(text_string)
 Get an editable copy installed
 
 ```
-uv pip install -e proofread-eng-scifi
+uv pip install -e proofread-eng
 ```
 or
 
 ```
-git clone https://codeberg.org/brohrer/proofread-eng-scifi.git
-cd proofread-eng-scifi
+git clone https://codeberg.org/brohrer/proofread-eng.git
+cd proofread-eng
 uv pip install -e .
 ```
 
@@ -68,7 +68,7 @@ uv run pytest
 
 ### How the code is organized
 
-![Project structure for proofread-eng-scifi
+![Project structure for proofread-eng
 ](https://raw.githubusercontent.com/brohrer/blog_images/refs/heads/main/alms_task/project_structure.png)
 
 Detail in [this blog post](https://brandonrohrer.at/alms_end_to_end.html).
