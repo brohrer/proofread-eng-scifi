@@ -1,7 +1,5 @@
 import os
 
-data_path = os.path.join(os.path.dirname(__file__), "..", "..", "data")
-
 
 class Corpus:
     """
@@ -9,7 +7,7 @@ class Corpus:
     Models should not have to worry about paths and reading files.
     """
 
-    def __init__(self, version=None, description=""):
+    def __init__(self, data_path, version=None, description=""):
         self.path = os.path.join(data_path, version)
         self.n_files = len(self.get_filenames_list())
         self.description = description
@@ -51,16 +49,3 @@ class Corpus:
             yield file_text
 
             del file_text
-
-
-registry = {
-    "00": Corpus(version="00", description="classic sci-fi novels"),
-    "01": Corpus(version="01", description="classic sci-fi novels"),
-    "02": Corpus(version="02", description="classic sci-fi novels"),
-    "03": Corpus(version="03", description="classic sci-fi novels"),
-    "04": Corpus(version="04", description="fiction books"),
-    "05": Corpus(version="05", description="English texts"),
-    "100": Corpus(version="100", description="Frankenstein"),
-    "101": Corpus(version="101", description="Alice in Wonderland"),
-    "102": Corpus(version="102", description="Call of Cthulhu"),
-}

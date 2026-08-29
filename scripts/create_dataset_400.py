@@ -11,6 +11,7 @@ Run from the directory with
 """
 
 import os
+
 import pandas as pd
 
 # import the csv of metadata
@@ -71,13 +72,8 @@ for file_id in tx_df["id"]:
         header_start = text.index("*** START OF")
         header_end = text[header_start + 1 :].index("***\n") + header_start + 5
     except ValueError:
-        try:
-            header_start = text.index("***START OF")
-            header_end = (
-                text[header_start + 1 :].index("***\n") + header_start + 4
-            )
-        except ValueError:
-            raise
+        header_start = text.index("***START OF")
+        header_end = text[header_start + 1 :].index("***\n") + header_start + 4
     print(text[header_start:header_end])
 
     # find end index
@@ -87,10 +83,7 @@ for file_id in tx_df["id"]:
         try:
             footer_start = text.index("*** END OF")
         except ValueError:
-            try:
-                footer_start = text.index("***END OF")
-            except ValueError:
-                raise
+            footer_start = text.index("***END OF")
     print(text[footer_start : footer_start + 30])
 
     with open(target, "wt") as f:

@@ -1,4 +1,5 @@
 import random
+
 from proofread_eng.models.random.random import RandomModel, registry
 
 model = registry["00"]

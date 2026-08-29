@@ -3,6 +3,7 @@ A script for exploring and illustrating the text chunks that a tokenizer learns.
 """
 
 import random
+
 from proofread_eng.models.tokenizer.tokenizer import registry
 
 n_samples = 100

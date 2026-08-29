@@ -130,6 +130,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+uv.lock
 
 # Spyder project settings
 .spyderproject
@@ -176,5 +177,16 @@ TODO.md
 *.swo
 .DS_Store
 
-# Training data
-data/training_02/
+# raw data
+src/proofread_eng/data/train/0*
+src/proofread_eng/data/train/1*
+src/proofread_eng/data/tune/0*
+src/proofread_eng/data/tune/1*
+src/proofread_eng/data/eval/0*
+src/proofread_eng/data/eval/1*
+
+# run artefacts
+performance_summary.md
+plots/
+
+

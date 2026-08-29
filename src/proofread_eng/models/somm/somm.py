@@ -4,6 +4,7 @@ token, given the previous token.
 """
 
 import os
+
 from proofread_eng.models.markov_base import MarkovBase
 
 
@@ -40,13 +41,11 @@ class ConstrainedSparseSecondOrderMarkovModel(MarkovBase):
 
     def _train_from_tokens(self, ids):
         for i_transition in range(len(ids) - 2):
-            bigram_key = tuple([ids[i_transition], ids[i_transition + 1]])
-            trigram_key = tuple(
-                [
-                    ids[i_transition],
-                    ids[i_transition + 1],
-                    ids[i_transition + 2],
-                ]
+            bigram_key = (ids[i_transition], ids[i_transition + 1])
+            trigram_key = (
+                ids[i_transition],
+                ids[i_transition + 1],
+                ids[i_transition + 2],
             )
             self.bigram_counts[bigram_key] = (
                 self.bigram_counts.get(bigram_key, 0) + 1
@@ -99,13 +98,11 @@ class ConstrainedSparseSecondOrderMarkovModel(MarkovBase):
         # two tokens, so initialize them by hand.
         likelihoods = [1.0, 1.0]
         for i_transition in range(len(ids) - 2):
-            bigram_key = tuple([ids[i_transition], ids[i_transition + 1]])
-            trigram_key = tuple(
-                [
-                    ids[i_transition],
-                    ids[i_transition + 1],
-                    ids[i_transition + 2],
-                ]
+            bigram_key = (ids[i_transition], ids[i_transition + 1])
+            trigram_key = (
+                ids[i_transition],
+                ids[i_transition + 1],
+                ids[i_transition + 2],
             )
             bigram_count = self.bigram_counts.get(bigram_key, self.epsilon)
             trigram_count = self.trigram_counts.get(trigram_key, 0)
@@ -217,11 +214,11 @@ registry = {
         tokenizer_version="05",
         corpus_versions=["04"],
     ),
-    "19": ConstrainedSparseSecondOrderMarkovModel(
-        version="19",
-        tokenizer_version="05",
-        corpus_versions=["05"],
-    ),
+    # "19": ConstrainedSparseSecondOrderMarkovModel(
+    #     version="19",
+    #     tokenizer_version="05",
+    #     corpus_versions=["05"],
+    # ),
     "20": ConstrainedSparseSecondOrderMarkovModel(
         version="20",
         tokenizer_version="05",

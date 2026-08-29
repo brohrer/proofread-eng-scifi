@@ -1,4 +1,5 @@
 import random
+
 from proofread_eng.models.tokenizer.tokenizer import (
     registry as tokenizer_registry,
 )
@@ -13,7 +14,7 @@ class RandomModel:
         self.tokenizer = tokenizer_registry[tokenizer_version]
         self.description = description
 
-    def calculate_likelihoods_from_ids(self, body_ids):
+    def calculate_likelihoods_from_ids(self, body_ids, beta=None):
         # For each token, generate a random number, representing
         # how unexpected it is.
         likelihoods = [random.random() for body_id in body_ids]

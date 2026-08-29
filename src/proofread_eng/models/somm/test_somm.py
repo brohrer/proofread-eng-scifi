@@ -1,11 +1,13 @@
 import os
-import pytest
 import time
+
 import numpy as np
+import pytest
 from proofread_eng.data_registry import registry as data_registry
+
 from proofread_eng.models.somm.somm import (
-    registry,
     ConstrainedSparseSecondOrderMarkovModel,
+    registry,
 )
 from proofread_eng.models.tokenizer.tokenizer import (
     registry as tokenizer_registry,
@@ -20,7 +22,7 @@ somm_id_for_retrieval = "16"
 @pytest.fixture
 def test_text():
     corpus = data_registry[corpus_version]
-    body = list(corpus.get_text_files())[0]
+    body = next(iter(corpus.get_text_files()))
     return body[:20000]
 
 
@@ -63,10 +65,10 @@ def test_sparse_somm_training_from_tokens(sparse_model, test_text):
 
     assert sparse_model.is_ready()
 
-    trigram_key = list(sparse_model.trigram_counts.keys())[0]
-    trigram_value = list(sparse_model.trigram_counts.values())[0]
-    bigram_key = list(sparse_model.bigram_counts.keys())[0]
-    bigram_value = list(sparse_model.bigram_counts.values())[0]
+    trigram_key = next(iter(sparse_model.trigram_counts.keys()))
+    trigram_value = next(iter(sparse_model.trigram_counts.values()))
+    bigram_key = next(iter(sparse_model.bigram_counts.keys()))
+    bigram_value = next(iter(sparse_model.bigram_counts.values()))
     assert isinstance(trigram_key, tuple)
     assert isinstance(trigram_key[0], int)
     assert isinstance(trigram_value, int)

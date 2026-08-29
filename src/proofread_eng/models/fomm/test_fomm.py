@@ -1,11 +1,13 @@
 import os
-import pytest
 import time
+
 import numpy as np
+import pytest
+
 from proofread_eng.data_registry import registry as data_registry
 from proofread_eng.models.fomm.fomm import (
-    registry,
     SparseFirstOrderMarkovModel,
+    registry,
 )
 from proofread_eng.models.tokenizer.tokenizer import (
     registry as tokenizer_registry,
@@ -20,7 +22,7 @@ fomm_id_for_retrieval = "11"
 @pytest.fixture
 def test_text():
     corpus = data_registry[corpus_version]
-    body = list(corpus.get_text_files())[0]
+    body = next(iter(corpus.get_text_files()))
     return body[:20000]
 
 
@@ -58,10 +60,10 @@ def test_sparse_fomm_training_from_tokens(sparse_model, test_text):
     sparse_model.ready = True
     sparse_model._train_from_tokens(ids)
 
-    bigram_key = list(sparse_model.bigram_counts.keys())[0]
-    bigram_value = list(sparse_model.bigram_counts.values())[0]
-    unigram_key = list(sparse_model.unigram_counts.keys())[0]
-    unigram_value = list(sparse_model.unigram_counts.values())[0]
+    bigram_key = next(iter(sparse_model.bigram_counts.keys()))
+    bigram_value = next(iter(sparse_model.bigram_counts.values()))
+    unigram_key = next(iter(sparse_model.unigram_counts.keys()))
+    unigram_value = next(iter(sparse_model.unigram_counts.values()))
     assert isinstance(bigram_key, tuple)
     assert isinstance(bigram_key[0], int)
     assert isinstance(bigram_value, int)

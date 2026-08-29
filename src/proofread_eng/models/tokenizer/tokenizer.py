@@ -1,6 +1,10 @@
 import os
+
 import sentencepiece as spm
-from proofread_eng.data_registry import registry as data_registry
+
+from proofread_eng.data.train.registry import registry as corpus_registry
+
+module_dirname = os.path.dirname(__file__)
 
 
 class Tokenizer:
@@ -25,7 +29,7 @@ class Tokenizer:
         # nfkc_cf: nfkc + Unicode case folding.
         remove_extra_whitespaces=False,
         split_by_whitespace=False,
-        model_dir=os.path.dirname(__file__),
+        model_dir=module_dirname,
     ):
         self.version = version
         self.corpus_version = corpus_version
@@ -45,6 +49,30 @@ class Tokenizer:
         if not os.path.isfile(self.model_path):
             self.train()
 
+    def stats_summary(self):
+        if self.vocab_size >= 1000:
+            vocab_str = f"{int(self.vocab_size / 1000)}k"
+        else:
+            vocab_str = str(int(self.vocab_size))
+
+        n_books = corpus_registry[self.corpus_version].n_files
+        if n_books >= 1000:
+            books_str = f"{int(n_books / 1000)}k"
+        else:
+            books_str = str(int(n_books))
+
+        summary = ", ".join(
+            [
+                f"tk{self.version}",
+                f"vocab={vocab_str}",
+                f"books={books_str}",
+                f"norm={self.normalization_rule_name}",
+                f"type={self.model_type}",
+                f"ws_split={self.split_by_whitespace}",
+            ]
+        )
+        return summary
+
     def train(self):
         """
         The train() call below is a wrapper around the command line
@@ -54,7 +82,7 @@ class Tokenizer:
             [
                 f"--input={training_paths}",
                 f"--model_prefix={self.version}",
-                f"--model_type={elf.odel_type}",
+                f"--model_type={self.model_type}",
                 f"--normalization_rule_name={self.normalization_rule_name}",
                 f"--remove_extra_whitespaces={str(self.remove_extra_whitespaces).lower()}",
                 f"--split_by_whitespace={str(self.split_by_whitespace).lower()}",
@@ -63,7 +91,7 @@ class Tokenizer:
         )
         spm.SentencePieceTrainer.train(training_arguments)
         """
-        training_corpus = data_registry[self.corpus_version]
+        training_corpus = corpus_registry[self.corpus_version]
         training_paths = ",".join(training_corpus.get_filepaths_list())
         spm.SentencePieceTrainer.train(
             input=training_paths,

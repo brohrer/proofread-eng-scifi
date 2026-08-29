@@ -9,10 +9,11 @@ include a long startup time, especially if they haven't been trained yet.
 
 import os
 import pickle
+
+from proofread_eng.data.train.registry import registry as training_data_registry
 from proofread_eng.models.tokenizer.tokenizer import (
     registry as tokenizer_registry,
 )
-from proofread_eng.data_registry import registry as data_registry
 
 
 class MarkovBase:
@@ -48,18 +49,24 @@ class MarkovBase:
 
         self._initialize()
         for corpus_version in self.corpus_versions:
-            corpus = data_registry[corpus_version]
+            corpus = training_data_registry[corpus_version]
             for training_text in corpus.get_text_files(verbose=self.verbose):
                 ids = self.tokenizer.encode_as_ids(training_text)
                 self._train_from_tokens(ids)
 
+        # If there is a _tune() function, call it
+        try:
+            self._tune()
+        except AttributeError:
+            pass
+
         self._save()
 
-    def calculate_likelihoods(self, text):
+    def calculate_likelihoods(self, text, alpha=None, beta=None):
         ids = self.tokenizer.encode_as_ids(text)
-        return self.calculate_likelihoods_from_ids(ids)
+        return self.calculate_likelihoods_from_ids(ids, alpha, beta)
 
-    def calculate_likelihoods_from_ids(self, ids):
+    def calculate_likelihoods_from_ids(self, ids, alpha=None, beta=None):
         """
         Rely on lazy training. Don't train until the model is requested
         to start calculating likelihoods.
@@ -80,8 +87,10 @@ class MarkovBase:
             except FileNotFoundError:
                 print("model not found. retraining from scratch.")
                 self.train()
-
-        return self._calc_likelihoods(ids)
+        if alpha is None and beta is None:
+            return self._calc_likelihoods(ids)
+        else:
+            return self._calc_likelihoods(ids, alpha, beta)
 
     def _initialize(self):
         raise NotImplementedError

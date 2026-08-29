@@ -1,9 +1,11 @@
 import os
-import pytest
 import time
+
+import pytest
+
 from proofread_eng.models.tokenizer.tokenizer import (
-    registry,
     Tokenizer,
+    registry,
 )
 
 corpus_version = "00"

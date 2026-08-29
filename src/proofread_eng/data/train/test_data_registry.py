@@ -1,13 +1,15 @@
 import os
-from proofread_eng.data_registry import Corpus, data_path, registry
+
+from proofread_eng.data.corpus import Corpus
+from proofread_eng.data.train.registry import data_path, registry
 
 
 def test_registry_loading():
     assert isinstance(registry, dict)
-    assert isinstance(list(registry.keys())[0], str)
-    assert isinstance(list(registry.values())[0], Corpus)
+    assert isinstance(next(iter(registry.keys())), str)
+    assert isinstance(next(iter(registry.values())), Corpus)
     assert len(list(registry.keys())) > 3
-    assert registry["100"].description == "Frankenstein"
+    assert registry["01"].description == "classic sci-fi novels"
 
 
 def test_data_path():
@@ -15,12 +17,12 @@ def test_data_path():
     assert len(data_dirs) > 5
     assert "00" in data_dirs
     assert "05" in data_dirs
-    assert "101" in data_dirs
     assert "-1" not in data_dirs
 
 
 def test_corpus():
-    data_corpus = Corpus(version="01", description="a test corpus")
+    data_path = os.path.dirname(__file__)
+    data_corpus = Corpus(data_path, version="01", description="a test corpus")
 
     assert data_corpus.path[-2:] == "01"
     assert data_corpus.n_files == 10
